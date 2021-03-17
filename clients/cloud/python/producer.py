@@ -59,14 +59,17 @@ if __name__ == '__main__':
             print("Produced record to topic {} partition [{}] @ offset {}"
                   .format(msg.topic(), msg.partition(), msg.offset()))
 
-    for n in range(10):
-        record_key = "alice"
+    for n in range(100000):
+        record_key = str(n)
         record_value = json.dumps({'count': n})
         print("Producing record: {}\t{}".format(record_key, record_value))
-        producer.produce(topic, key=record_key, value=record_value, on_delivery=acked)
+        producer.produce(topic, key=record_key, value=record_value)
         # p.poll() serves delivery reports (on_delivery)
         # from previous produce() calls.
-        producer.poll(0)
+        queue_length = producer.flush(10)
+        print("queue_length: " + str(queue_length))
+        if (queue_length > 0):
+            raise Exception("queue_length > 0: " + str(queue_length))
 
     producer.flush()
 

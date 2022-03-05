@@ -1,0 +1,12 @@
+{
+    "name" : "datagen_ccloud_transactions",
+    "connector.class": "DatagenSource",
+    "kafka.api.key": "$CLOUD_KEY",
+    "kafka.api.secret" : "$CLOUD_SECRET",
+    "kafka.topic" : "transactions",
+    "output.data.format" : "AVRO",
+    "quickstart" : "TRANSACTIONS",
+    "max.interval": "500",
+    "iterations": "1000000000",
+    "tasks.max" : "1"
+}

@@ -74,13 +74,27 @@ $CMD &>"$REDIRECT_TO" \
   && print_code_pass -c "$CMD" \
   || exit_with_error -c $? -n "$NAME" -m "$CMD" -l $(($LINENO -3))
 
+CMD="confluent kafka topic create transactions"
+$CMD &>"$REDIRECT_TO" \
+  && print_code_pass -c "$CMD" \
+  || exit_with_error -c $? -n "$NAME" -m "$CMD" -l $(($LINENO -3))
+
+CMD="confluent kafka topic create credit_cards"
+$CMD &>"$REDIRECT_TO" \
+  && print_code_pass -c "$CMD" \
+  || exit_with_error -c $? -n "$NAME" -m "$CMD" -l $(($LINENO -3))
+
 print_pass "Topics created"
  
 printf "\n";print_process_start "====== Create fully-managed Datagen Source Connectors to produce sample data."
 ccloud::create_connector connectors/ccloud-datagen-pageviews.json || exit 1
 ccloud::create_connector connectors/ccloud-datagen-users.json || exit 1
+ccloud::create_connector connectors/ccloud-datagen-transactions.json || exit 1
+ccloud::create_connector connectors/ccloud-datagen-credit_cards.json || exit 1
 ccloud::wait_for_connector_up connectors/ccloud-datagen-pageviews.json 300 || exit 1
 ccloud::wait_for_connector_up connectors/ccloud-datagen-users.json 300 || exit 1
+ccloud::wait_for_connector_up connectors/ccloud-datagen-transactions.json 300 || exit 1
+ccloud::wait_for_connector_up connectors/ccloud-datagen-credit_cards.json 300 || exit 1
 printf "\nSleeping 60 seconds to give the Datagen Source Connectors a chance to start producing messages\n"
 sleep 60
 

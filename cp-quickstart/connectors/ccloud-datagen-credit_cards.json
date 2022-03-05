@@ -1,0 +1,12 @@
+{
+    "name" : "datagen_ccloud_credit_cards",
+    "connector.class": "DatagenSource",
+    "kafka.api.key": "$CLOUD_KEY",
+    "kafka.api.secret" : "$CLOUD_SECRET",
+    "kafka.topic" : "credit_cards",
+    "output.data.format" : "PROTOBUF",
+    "quickstart" : "CREDIT_CARDS",
+    "max.interval": "2000",
+    "iterations": "1000000000",
+    "tasks.max" : "1"
+}
